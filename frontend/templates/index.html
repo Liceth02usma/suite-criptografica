@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CryptoLab — Laboratorio Interactivo de Criptografía</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+</head>
+<body>
+
+<!-- ░░░ MOBILE TOGGLE ░░░ -->
+<button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menú">
+  <i class="fa-solid fa-bars"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ░░░ SIDEBAR ░░░ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+    <h1>CryptoLab</h1>
+    <p>Laboratorio Interactivo de Criptografía</p>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">General</div>
+    <button class="nav-item active" data-section="inicio">
+      <i class="fa-solid fa-house"></i> Inicio
+    </button>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Algoritmos</div>
+    <button class="nav-item" data-section="digest">
+      <i class="fa-solid fa-fingerprint"></i> Message Digest
+    </button>
+    <button class="nav-item" data-section="firma-rsa">
+      <i class="fa-solid fa-pen-nib"></i> Firma RSA
+    </button>
+    <button class="nav-item" data-section="simetrico">
+      <i class="fa-solid fa-lock"></i> AES-256-GCM
+    </button>
+    <button class="nav-item" data-section="asimetrico">
+      <i class="fa-solid fa-key"></i> RSA-OAEP
+    </button>
+    <button class="nav-item" data-section="ecc">
+      <i class="fa-solid fa-circle-nodes"></i> Curvas Elípticas
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">
+      Python · Flask · cryptography
+    </div>
+  </div>
+</aside>
+
+<!-- ░░░ MAIN ░░░ -->
+<div class="main-content">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div>
+      <div class="topbar-title" id="topbarTitle">Inicio</div>
+      <div class="topbar-subtitle" id="topbarSubtitle">Laboratorio Interactivo de Criptografía</div>
+    </div>
+    <span class="topbar-badge"><i class="fa-solid fa-shield-halved" style="margin-right:5px;"></i>CryptoLab</span>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════
+       VISTA: INICIO
+       ══════════════════════════════════════════════════════════ -->
+  <section id="view-inicio" class="view-section page-content">
+    <h1 class="page-title">Bienvenido a CryptoLab</h1>
+    <p class="page-subtitle">Explora los cinco pilares de la criptografía moderna de forma interactiva y visual.</p>
+
+    <div class="dashboard-grid">
+
+      <div class="card card-elevated dash-card" data-goto="digest">
+        <div class="dash-icon" style="background:#EFF6FF;color:#2563EB;">
+          <i class="fa-solid fa-fingerprint"></i>
+        </div>
+        <h3>Message Digest</h3>
+        <p>Genera huellas digitales únicas con SHA-256, SHA-3-256 y MD5. Observa el efecto avalancha.</p>
+        <button class="btn btn-primary btn-sm" data-goto="digest">
+          <i class="fa-solid fa-arrow-right"></i> Explorar
+        </button>
+      </div>
+
+      <div class="card card-elevated dash-card" data-goto="firma-rsa">
+        <div class="dash-icon" style="background:#F0FDF4;color:#22C55E;">
+          <i class="fa-solid fa-pen-nib"></i>
+        </div>
+        <h3>Firma Digital RSA</h3>
+        <p>Firma y verifica mensajes con RSA-PSS 2048-bit para garantizar autenticidad e integridad.</p>
+        <button class="btn btn-primary btn-sm" data-goto="firma-rsa">
+          <i class="fa-solid fa-arrow-right"></i> Explorar
+        </button>
+      </div>
+
+      <div class="card card-elevated dash-card" data-goto="simetrico">
+        <div class="dash-icon" style="background:#FFFBEB;color:#F59E0B;">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3>AES-256-GCM</h3>
+        <p>Cifrado simétrico autenticado. Una clave compartida cifra y descifra con verificación de integridad.</p>
+        <button class="btn btn-primary btn-sm" data-goto="simetrico">
+          <i class="fa-solid fa-arrow-right"></i> Explorar
+        </button>
+      </div>
+
+      <div class="card card-elevated dash-card" data-goto="asimetrico">
+        <div class="dash-icon" style="background:#ECFEFF;color:#06B6D4;">
+          <i class="fa-solid fa-key"></i>
+        </div>
+        <h3>RSA-OAEP</h3>
+        <p>Cifrado asimétrico: cualquiera puede cifrar con la clave pública, solo el propietario descifra.</p>
+        <button class="btn btn-primary btn-sm" data-goto="asimetrico">
+          <i class="fa-solid fa-arrow-right"></i> Explorar
+        </button>
+      </div>
+
+      <div class="card card-elevated dash-card" data-goto="ecc">
+        <div class="dash-icon" style="background:#FDF4FF;color:#A855F7;">
+          <i class="fa-solid fa-circle-nodes"></i>
+        </div>
+        <h3>Curvas Elípticas</h3>
+        <p>ECDSA con P-256: claves mucho más compactas que RSA con seguridad equivalente.</p>
+        <button class="btn btn-primary btn-sm" data-goto="ecc">
+          <i class="fa-solid fa-arrow-right"></i> Explorar
+        </button>
+      </div>
+
+    </div>
+
+    <div class="info-box info-box-primary">
+      <div class="info-box-title"><i class="fa-solid fa-circle-info"></i> Acerca de esta suite</div>
+      <p>CryptoLab es una plataforma educativa que implementa algoritmos criptográficos reales usando la librería <strong>cryptography (PyCA)</strong> de Python. Todas las operaciones ocurren en el servidor — no se almacenan claves ni mensajes entre sesiones.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       VISTA A — MESSAGE DIGEST
+       ══════════════════════════════════════════════════════════ -->
+  <section id="view-digest" class="view-section page-content hidden">
+    <h1 class="page-title">Message Digest</h1>
+    <p class="page-subtitle">Genera resúmenes digitales (hashes) de longitud fija para cualquier mensaje.</p>
+
+    <div class="info-box info-box-primary mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-circle-question"></i> ¿Qué hace este algoritmo?</div>
+      <p>Una función hash criptográfica toma cualquier mensaje de longitud arbitraria y produce una cadena de bits de longitud fija (el <em>digest</em>). El resultado es determinista, rápido de calcular e imposible de revertir.</p>
+    </div>
+
+    <div class="info-box info-box-cyan mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-gears"></i> ¿Cómo funciona?</div>
+      <ul>
+        <li><strong>SHA-256:</strong> Produce 256 bits. Estándar NIST, usado en TLS, certificados y firmas digitales.</li>
+        <li><strong>SHA-3-256:</strong> Variante Keccak aprobada por NIST en 2015. Arquitectura diferente a SHA-2.</li>
+        <li><strong>MD5:</strong> Produce 128 bits. Obsoleto para seguridad, pero útil para checksums no críticos.</li>
+      </ul>
+    </div>
+
+    <div class="card mb-24">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-keyboard"></i></div>
+        <div>
+          <div class="card-title">Generar Hash</div>
+          <div class="card-desc">Ingresa el mensaje y selecciona el algoritmo</div>
+        </div>
+      </div>
+      <form id="digestForm">
+        <div class="form-group">
+          <label class="form-label" for="digestAlgo">Algoritmo</label>
+          <select class="select" id="digestAlgo" name="algoritmo">
+            <option value="sha256">SHA-256 (256 bits)</option>
+            <option value="sha3_256">SHA-3-256 (256 bits)</option>
+            <option value="md5">MD5 (128 bits)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="digestMsg">
+            Mensaje <span class="label-hint">texto plano</span>
+          </label>
+          <textarea class="textarea" id="digestMsg" name="mensaje"
+            placeholder="Escribe tu mensaje aquí..." rows="4"
+            data-counter="digestCharCount" style="min-height:120px;"></textarea>
+          <div class="char-counter" id="digestCharCount">0 caracteres</div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-full">
+          <i class="fa-solid fa-hashtag"></i> Generar Hash
+        </button>
+      </form>
+    </div>
+
+    <!-- Resultado -->
+    <div id="digestResult" class="hidden">
+      <div class="card mb-16">
+        <div class="card-header">
+          <div class="card-icon success-icon"><i class="fa-solid fa-check"></i></div>
+          <div>
+            <div class="card-title">Resultado</div>
+            <div class="card-desc">Hash generado correctamente</div>
+          </div>
+        </div>
+
+        <div class="result-row">
+          <span class="result-label"><i class="fa-solid fa-hashtag" style="margin-right:6px;"></i>Hash Hex</span>
+          <span class="result-value text-mono" id="digestHashHex">—</span>
+          <div class="result-actions">
+            <button class="btn btn-ghost btn-sm" id="copyHexBtn" data-tooltip="Copiar hex">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
+        </div>
+        <div class="result-row">
+          <span class="result-label"><i class="fa-solid fa-code" style="margin-right:6px;"></i>Base64</span>
+          <span class="result-value text-mono" id="digestHashB64">—</span>
+          <div class="result-actions">
+            <button class="btn btn-ghost btn-sm" id="copyB64Btn" data-tooltip="Copiar Base64">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
+        </div>
+        <div class="result-row">
+          <span class="result-label"><i class="fa-solid fa-ruler" style="margin-right:6px;"></i>Longitud</span>
+          <span class="result-value" id="digestBits">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label"><i class="fa-solid fa-clock" style="margin-right:6px;"></i>Tiempo</span>
+          <span class="result-value" id="digestTime">—</span>
+        </div>
+      </div>
+
+      <!-- Efecto Avalancha -->
+      <div id="avalanchePanel" class="card hidden">
+        <div class="card-header">
+          <div class="card-icon" style="background:#FDF4FF;"><i class="fa-solid fa-wand-magic-sparkles" style="color:#A855F7;"></i></div>
+          <div>
+            <div class="card-title">Efecto Avalancha</div>
+            <div class="card-desc">Un solo carácter diferente produce un hash completamente distinto</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin-bottom:16px;">
+          <div>
+            <div class="text-xs text-secondary mb-4">Mensaje original</div>
+            <div class="text-sm fw-600" id="avalancheMsg1" style="word-break:break-all;"></div>
+          </div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+          <div>
+            <div class="text-xs text-secondary mb-4">Mensaje modificado (+1 carácter)</div>
+            <div class="text-sm fw-600" id="avalancheMsg2" style="word-break:break-all;"></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;">
+          <div>
+            <div class="text-xs text-secondary mb-4">Hash original (bits)</div>
+            <div class="avalanche-hash" id="avalancheHash1"></div>
+          </div>
+          <div class="avalanche-center">
+            <div class="avalanche-percent" id="avalanchePercent">—</div>
+            <div class="avalanche-label">diferente</div>
+          </div>
+          <div>
+            <div class="text-xs text-secondary mb-4">Hash modificado (bits)</div>
+            <div class="avalanche-hash" id="avalancheHash2"></div>
+          </div>
+        </div>
+        <div class="text-xs text-muted mt-8" id="avalancheDiffBits"></div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <i class="fa-solid fa-lightbulb"></i>
+      <p><strong>Dato curioso:</strong> SHA-256 produce 2²⁵⁶ posibles valores distintos — más que el número estimado de átomos en el universo observable. Encontrar dos mensajes con el mismo hash (<em>colisión</em>) es computacionalmente inviable.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       VISTA B — FIRMA DIGITAL RSA
+       ══════════════════════════════════════════════════════════ -->
+  <section id="view-firma-rsa" class="view-section page-content hidden">
+    <h1 class="page-title">Firma Digital RSA</h1>
+    <p class="page-subtitle">Garantiza autenticidad e integridad usando RSA-PSS con SHA-256.</p>
+
+    <div class="info-box info-box-primary mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-circle-question"></i> ¿Qué hace este algoritmo?</div>
+      <p>La firma digital RSA-PSS permite al emisor demostrar que un mensaje fue enviado por él (autenticidad) y que no fue alterado en tránsito (integridad). Solo el poseedor de la clave privada puede firmar; cualquiera con la clave pública puede verificar.</p>
+    </div>
+    <div class="info-box info-box-cyan mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-gears"></i> ¿Cómo funciona?</div>
+      <ul>
+        <li><strong>Generación:</strong> Se genera un par de claves RSA-2048 (pública + privada).</li>
+        <li><strong>Firma:</strong> La clave privada firma el hash SHA-256 del mensaje usando RSA-PSS.</li>
+        <li><strong>Verificación:</strong> La clave pública verifica que la firma corresponde al mensaje.</li>
+        <li><strong>PSS vs PKCS1v15:</strong> PSS es el esquema moderno recomendado por NIST (SP 800-131A).</li>
+      </ul>
+    </div>
+
+    <!-- Generar claves -->
+    <div class="card mb-20">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-key"></i></div>
+        <div>
+          <div class="card-title">Par de Claves RSA-2048</div>
+          <div class="card-desc">Genera un par de claves o pega las tuyas en formato PEM</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="rsaGenerarClaves">
+        <i class="fa-solid fa-rotate"></i> Generar par RSA-2048
+      </button>
+
+      <div id="rsaKeysPanel" class="hidden mt-16">
+        <div class="two-col">
+          <div>
+            <div class="code-block-header">
+              <span class="code-block-label">Clave Privada (PEM)</span>
+              <button class="btn btn-ghost btn-sm" id="copyRsaPriv"><i class="fa-solid fa-copy"></i> Copiar</button>
+            </div>
+            <textarea class="textarea text-mono" id="rsaPrivKey" rows="8" style="min-height:180px;font-size:11px;" placeholder="-----BEGIN RSA PRIVATE KEY-----"></textarea>
+          </div>
+          <div>
+            <div class="code-block-header">
+              <span class="code-block-label">Clave Pública (PEM)</span>
+              <button class="btn btn-ghost btn-sm" id="copyRsaPub"><i class="fa-solid fa-copy"></i> Copiar</button>
+            </div>
+            <textarea class="textarea text-mono" id="rsaPubKey" rows="8" style="min-height:180px;font-size:11px;" placeholder="-----BEGIN PUBLIC KEY-----"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firmar / Verificar -->
+    <div class="two-col mb-20">
+      <!-- Firmar -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-pen-nib"></i></div>
+          <div><div class="card-title">Firmar</div><div class="card-desc">Con clave privada</div></div>
+        </div>
+        <form id="rsaFirmarForm">
+          <div class="form-group">
+            <label class="form-label" for="rsaMsgFirmar">Mensaje</label>
+            <textarea class="textarea" id="rsaMsgFirmar" rows="3" placeholder="Mensaje a firmar..."
+              data-counter="rsaMsgFirmarCount" style="min-height:90px;"></textarea>
+            <div class="char-counter" id="rsaMsgFirmarCount">0 caracteres</div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <i class="fa-solid fa-pen-nib"></i> Firmar mensaje
+          </button>
+        </form>
+        <div id="rsaFirmaPanel" class="hidden mt-16">
+          <div class="code-block-header">
+            <span class="code-block-label">Firma (Base64)</span>
+            <button class="btn btn-ghost btn-sm" id="copyRsaFirma"><i class="fa-solid fa-copy"></i></button>
+          </div>
+          <div class="code-block pem" id="rsaFirmaResult" style="word-break:break-all;"></div>
+        </div>
+      </div>
+
+      <!-- Verificar -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon success-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div><div class="card-title">Verificar</div><div class="card-desc">Con clave pública</div></div>
+        </div>
+        <form id="rsaVerificarForm">
+          <div class="form-group">
+            <label class="form-label" for="rsaFirmaMsgVerify">Mensaje</label>
+            <textarea class="textarea" id="rsaFirmaMsgVerify" rows="2" placeholder="Mensaje original..." style="min-height:72px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rsaFirmaB64Verify">Firma (Base64)</label>
+            <textarea class="textarea text-mono" id="rsaFirmaB64Verify" rows="2" placeholder="Firma en Base64..." style="min-height:72px;font-size:11px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rsaPubKeyVerify">Clave Pública (PEM)</label>
+            <textarea class="textarea text-mono" id="rsaPubKeyVerify" rows="3" placeholder="-----BEGIN PUBLIC KEY-----" style="min-height:90px;font-size:11px;"></textarea>
+          </div>
+          <button type="submit" class="btn btn-secondary btn-full">
+            <i class="fa-solid fa-shield-check"></i> Verificar firma
+          </button>
+        </form>
+        <div id="rsaVerifyResult" class="hidden"></div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <i class="fa-solid fa-lightbulb"></i>
+      <p><strong>Dato curioso:</strong> RSA fue publicado por Rivest, Shamir y Adleman en 1977. Su seguridad se basa en la dificultad de factorizar números enteros grandes. Una clave RSA-2048 requeriría millones de años para romperse con la tecnología actual.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       VISTA C — AES-256-GCM
+       ══════════════════════════════════════════════════════════ -->
+  <section id="view-simetrico" class="view-section page-content hidden">
+    <h1 class="page-title">Cifrado Simétrico AES-256-GCM</h1>
+    <p class="page-subtitle">Cifrado autenticado: confidencialidad e integridad en una sola operación.</p>
+
+    <div class="info-box info-box-primary mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-circle-question"></i> ¿Qué hace este algoritmo?</div>
+      <p>AES-256-GCM cifra un mensaje con una clave compartida (simétrica) de 256 bits. El modo GCM (<em>Galois/Counter Mode</em>) proporciona tanto cifrado como autenticación: si alguien altera el texto cifrado, la verificación del <em>tag</em> fallará.</p>
+    </div>
+    <div class="info-box info-box-cyan mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-gears"></i> ¿Cómo funciona?</div>
+      <ul>
+        <li><strong>Clave:</strong> 32 bytes aleatorios (256 bits). Debe mantenerse secreta.</li>
+        <li><strong>IV / Nonce:</strong> 12 bytes aleatorios únicos por cada cifrado. Nunca reutilizar con la misma clave.</li>
+        <li><strong>Tag GCM:</strong> 16 bytes que verifican la integridad. Si se altera el mensaje, el tag no coincide.</li>
+      </ul>
+    </div>
+
+    <!-- Clave -->
+    <div class="card mb-20">
+      <div class="card-header">
+        <div class="card-icon warning-icon"><i class="fa-solid fa-key"></i></div>
+        <div><div class="card-title">Clave AES-256</div><div class="card-desc">32 bytes = 64 caracteres hexadecimales</div></div>
+      </div>
+      <div class="input-group">
+        <input type="text" class="input text-mono" id="aesClave" placeholder="Genera o ingresa 64 caracteres hex..." />
+        <button class="btn btn-primary" id="aesGenerarClave" data-tooltip="Generar clave aleatoria">
+          <i class="fa-solid fa-rotate"></i> Generar
+        </button>
+        <button class="btn btn-ghost" id="copyClave" data-tooltip="Copiar clave">
+          <i class="fa-solid fa-copy"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="two-col mb-20">
+      <!-- Cifrar -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-lock"></i></div>
+          <div><div class="card-title">Cifrar</div><div class="card-desc">Produce IV + ciphertext + tag</div></div>
+        </div>
+
+        <!-- Flujo visual -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:16px;padding:12px;background:var(--bg);border-radius:var(--radius-md);">
+          <div class="badge badge-info">Mensaje</div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-down" style="font-size:12px;"></i></div>
+          <div class="badge badge-warning">Clave + IV</div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-down" style="font-size:12px;"></i></div>
+          <div class="badge badge-success">Ciphertext + Tag</div>
+        </div>
+
+        <form id="aesCifrarForm">
+          <div class="form-group">
+            <label class="form-label" for="aesMsgCifrar">Mensaje</label>
+            <textarea class="textarea" id="aesMsgCifrar" rows="3" placeholder="Mensaje a cifrar..."
+              data-counter="aesMsgCifrarCount" style="min-height:90px;"></textarea>
+            <div class="char-counter" id="aesMsgCifrarCount">0 caracteres</div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <i class="fa-solid fa-lock"></i> Cifrar mensaje
+          </button>
+        </form>
+
+        <div id="aesCifrarPanel" class="hidden mt-16">
+          <div class="result-row">
+            <span class="result-label" data-tooltip="Initialization Vector — aleatorio, 12 bytes"><i class="fa-solid fa-shuffle" style="margin-right:6px;"></i>IV (hex)</span>
+            <span class="result-value text-mono" id="aesIvResult"></span>
+            <div class="result-actions"><button class="btn btn-ghost btn-sm" id="copyIv"><i class="fa-solid fa-copy"></i></button></div>
+          </div>
+          <div class="result-row">
+            <span class="result-label"><i class="fa-solid fa-lock" style="margin-right:6px;"></i>Cifrado (B64)</span>
+            <span class="result-value text-mono" id="aesCifradoResult" style="word-break:break-all;"></span>
+            <div class="result-actions"><button class="btn btn-ghost btn-sm" id="copyCifrado"><i class="fa-solid fa-copy"></i></button></div>
+          </div>
+          <div class="result-row">
+            <span class="result-label" data-tooltip="Authentication Tag — verifica integridad"><i class="fa-solid fa-tag" style="margin-right:6px;"></i>Tag GCM (B64)</span>
+            <span class="result-value text-mono" id="aesTagResult"></span>
+            <div class="result-actions"><button class="btn btn-ghost btn-sm" id="copyTag"><i class="fa-solid fa-copy"></i></button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Descifrar -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon success-icon"><i class="fa-solid fa-lock-open"></i></div>
+          <div><div class="card-title">Descifrar</div><div class="card-desc">Requiere IV + tag + clave correcta</div></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:16px;padding:12px;background:var(--bg);border-radius:var(--radius-md);">
+          <div class="badge badge-success">Ciphertext + Tag</div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-down" style="font-size:12px;"></i></div>
+          <div class="badge badge-warning">Clave + IV</div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-down" style="font-size:12px;"></i></div>
+          <div class="badge badge-info">Mensaje original</div>
+        </div>
+
+        <form id="aesDescifrarForm">
+          <div class="form-group">
+            <label class="form-label" for="aesCifradoDesc">Texto cifrado (Base64)</label>
+            <textarea class="textarea text-mono" id="aesCifradoDesc" rows="2" placeholder="Base64..." style="min-height:72px;font-size:11px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="aesIvDesc" data-tooltip="Initialization Vector">IV (hex)</label>
+            <input type="text" class="input text-mono" id="aesIvDesc" placeholder="24 caracteres hex..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="aesTagDesc" data-tooltip="Authentication Tag GCM">Tag GCM (Base64)</label>
+            <input type="text" class="input text-mono" id="aesTagDesc" placeholder="Base64..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="aesClaveDesc">Clave (hex)</label>
+            <input type="text" class="input text-mono" id="aesClaveDesc" placeholder="64 caracteres hex..." />
+          </div>
+          <button type="submit" class="btn btn-secondary btn-full">
+            <i class="fa-solid fa-lock-open"></i> Descifrar mensaje
+          </button>
+        </form>
+        <div id="aesDescifrarPanel" class="hidden mt-16">
+          <div id="aesDescifrarAlert" class="alert alert-info"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <i class="fa-solid fa-lightbulb"></i>
+      <p><strong>Dato curioso:</strong> AES fue seleccionado por NIST en 2001 tras un concurso público de 5 años. El algoritmo ganador (Rijndael) sigue siendo considerado irrompible con la tecnología actual — incluyendo computadoras cuánticas para claves de 256 bits.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       VISTA D — RSA-OAEP
+       ══════════════════════════════════════════════════════════ -->
+  <section id="view-asimetrico" class="view-section page-content hidden">
+    <h1 class="page-title">Cifrado Asimétrico RSA-OAEP</h1>
+    <p class="page-subtitle">Cifra con la clave pública del destinatario; solo él puede descifrar con su clave privada.</p>
+
+    <div class="info-box info-box-primary mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-circle-question"></i> ¿Qué hace este algoritmo?</div>
+      <p>RSA-OAEP permite que cualquier persona con la clave pública cifre un mensaje, pero solo el propietario de la clave privada correspondiente puede descifrarlo. Esto resuelve el problema del intercambio de claves en comunicación segura.</p>
+    </div>
+    <div class="info-box info-box-cyan mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-gears"></i> ¿Cómo funciona?</div>
+      <ul>
+        <li><strong>OAEP:</strong> Optimal Asymmetric Encryption Padding. Añade aleatoriedad al cifrado, resistiendo ataques de padding oracle.</li>
+        <li><strong>Limitación:</strong> RSA-OAEP con SHA-256 y clave de 2048 bits solo puede cifrar ~190 bytes directamente.</li>
+        <li><strong>En producción:</strong> Se usa un esquema híbrido RSA+AES: AES cifra el mensaje, RSA cifra la clave AES.</li>
+      </ul>
+    </div>
+
+    <!-- Generar claves -->
+    <div class="card mb-20">
+      <div class="card-header">
+        <div class="card-icon secondary-icon"><i class="fa-solid fa-key"></i></div>
+        <div><div class="card-title">Par de Claves RSA-2048</div><div class="card-desc">Clave pública para cifrar · Clave privada para descifrar</div></div>
+      </div>
+      <button class="btn btn-primary" id="oaepGenerarClaves">
+        <i class="fa-solid fa-rotate"></i> Generar par RSA-2048
+      </button>
+
+      <div id="oaepKeysPanel" class="hidden mt-16">
+        <div class="two-col">
+          <div>
+            <div class="code-block-header">
+              <span class="code-block-label">Clave Pública (PEM)</span>
+              <button class="btn btn-ghost btn-sm" id="copyOaepPub"><i class="fa-solid fa-copy"></i> Copiar</button>
+            </div>
+            <textarea class="textarea text-mono" id="oaepPubKey" rows="6" style="min-height:150px;font-size:11px;" placeholder="-----BEGIN PUBLIC KEY-----"></textarea>
+          </div>
+          <div>
+            <div class="code-block-header">
+              <span class="code-block-label">Clave Privada (PEM)</span>
+              <button class="btn btn-ghost btn-sm" id="copyOaepPriv"><i class="fa-solid fa-copy"></i> Copiar</button>
+            </div>
+            <textarea class="textarea text-mono" id="oaepPrivKey" rows="6" style="min-height:150px;font-size:11px;" placeholder="-----BEGIN RSA PRIVATE KEY-----"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col mb-20">
+      <!-- Cifrar -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-lock"></i></div>
+          <div><div class="card-title">Cifrar</div><div class="card-desc">Con clave pública</div></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:16px;padding:12px;background:var(--bg);border-radius:var(--radius-md);">
+          <div class="badge badge-info">Mensaje</div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-down" style="font-size:12px;"></i></div>
+          <div class="badge badge-info">Clave pública</div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-down" style="font-size:12px;"></i></div>
+          <div class="badge badge-success">Texto cifrado</div>
+        </div>
+
+        <form id="oaepCifrarForm">
+          <div class="form-group">
+            <label class="form-label" for="oaepMsg">
+              Mensaje <span class="label-hint">máx ~190 bytes</span>
+            </label>
+            <textarea class="textarea" id="oaepMsg" rows="3" placeholder="Mensaje a cifrar (máx ~190 bytes)..."
+              data-counter="oaepMsgCount" style="min-height:90px;"></textarea>
+            <div class="char-counter" id="oaepMsgCount">0 caracteres</div>
+          </div>
+          <div id="oaepSizeWarning" class="alert alert-warning hidden mb-16">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+              <strong>RSA no está diseñado para mensajes grandes.</strong><br>
+              Tu mensaje tiene <strong id="oaepByteCount">0</strong> bytes (límite: ~190). En sistemas reales se usa RSA+AES híbrido.
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <i class="fa-solid fa-lock"></i> Cifrar con clave pública
+          </button>
+        </form>
+
+        <div id="oaepCifrarPanel" class="hidden mt-16">
+          <div class="code-block-header">
+            <span class="code-block-label">Texto cifrado (Base64)</span>
+            <button class="btn btn-ghost btn-sm" id="copyOaepCifrado"><i class="fa-solid fa-copy"></i></button>
+          </div>
+          <div class="code-block" id="oaepCifradoResult" style="word-break:break-all;max-height:120px;overflow-y:auto;"></div>
+        </div>
+      </div>
+
+      <!-- Descifrar -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon success-icon"><i class="fa-solid fa-lock-open"></i></div>
+          <div><div class="card-title">Descifrar</div><div class="card-desc">Con clave privada</div></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:16px;padding:12px;background:var(--bg);border-radius:var(--radius-md);">
+          <div class="badge badge-success">Texto cifrado</div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-down" style="font-size:12px;"></i></div>
+          <div class="badge badge-warning">Clave privada</div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-down" style="font-size:12px;"></i></div>
+          <div class="badge badge-info">Mensaje original</div>
+        </div>
+
+        <form id="oaepDescifrarForm">
+          <div class="form-group">
+            <label class="form-label" for="oaepCifradoDesc">Texto cifrado (Base64)</label>
+            <textarea class="textarea text-mono" id="oaepCifradoDesc" rows="3" placeholder="Base64 del texto cifrado..." style="min-height:90px;font-size:11px;"></textarea>
+          </div>
+          <button type="submit" class="btn btn-secondary btn-full">
+            <i class="fa-solid fa-lock-open"></i> Descifrar con clave privada
+          </button>
+        </form>
+
+        <div id="oaepDescPanel" class="hidden mt-16">
+          <div class="alert alert-success">
+            <i class="fa-solid fa-circle-check"></i>
+            <div>
+              <strong>Descifrado exitoso</strong><br>
+              <span id="oaepDescResult" style="font-family:monospace;font-size:13px;"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <i class="fa-solid fa-lightbulb"></i>
+      <p><strong>Dato curioso:</strong> HTTPS utiliza criptografía asimétrica durante el <em>handshake</em> TLS para intercambiar una clave simétrica temporal. Después del handshake, toda la comunicación se cifra con esa clave simétrica (AES) por ser mucho más rápida que RSA.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       VISTA E — ECC ECDSA
+       ══════════════════════════════════════════════════════════ -->
+  <section id="view-ecc" class="view-section page-content hidden">
+    <h1 class="page-title">ECC — Curvas Elípticas (ECDSA)</h1>
+    <p class="page-subtitle">Firma y verifica con ECDSA en curva P-256: máxima seguridad, claves compactas.</p>
+
+    <div class="info-box info-box-primary mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-circle-question"></i> ¿Qué hace este algoritmo?</div>
+      <p>ECDSA (Elliptic Curve Digital Signature Algorithm) realiza firmas digitales usando la matemática de curvas elípticas. Ofrece la misma seguridad que RSA con claves significativamente más pequeñas, lo que lo hace ideal para dispositivos con recursos limitados.</p>
+    </div>
+    <div class="info-box info-box-cyan mb-24">
+      <div class="info-box-title"><i class="fa-solid fa-gears"></i> ¿Cómo funciona?</div>
+      <ul>
+        <li><strong>Curva P-256 (SECP256R1):</strong> Curva estándar NIST. Usada en TLS 1.3, JWT y passkeys.</li>
+        <li><strong>Tamaño de clave:</strong> 256 bits vs 2048 bits de RSA para seguridad equivalente.</li>
+        <li><strong>Velocidad:</strong> Operaciones hasta 10× más rápidas que RSA equivalente.</li>
+      </ul>
+    </div>
+
+    <!-- Comparación de tamaños -->
+    <div class="card mb-20">
+      <div class="card-header">
+        <div class="card-icon" style="background:#FDF4FF;"><i class="fa-solid fa-chart-bar" style="color:#A855F7;"></i></div>
+        <div><div class="card-title">Comparación de Tamaños de Clave</div><div class="card-desc">Seguridad equivalente, clave mucho más compacta</div></div>
+      </div>
+      <div class="key-comparison">
+        <div class="key-bar-row key-bar-rsa">
+          <div class="key-bar-label">
+            <span class="key-bar-name">RSA-2048</span>
+            <span class="key-bar-size">2048 bits</span>
+          </div>
+          <div class="key-bar-track">
+            <div class="key-bar-fill" style="width:100%;"></div>
+          </div>
+        </div>
+        <div class="key-bar-row key-bar-ecc" style="margin-top:12px;">
+          <div class="key-bar-label">
+            <span class="key-bar-name">ECC P-256</span>
+            <span class="key-bar-size" id="eccPrivSize">256 bits</span>
+          </div>
+          <div class="key-bar-track">
+            <div class="key-bar-fill" style="width:12.5%;"></div>
+          </div>
+        </div>
+      </div>
+      <p class="text-sm text-secondary mt-16">Una clave ECC de 256 bits ofrece seguridad equivalente a una clave RSA de 3072 bits, usando solo un 8% del espacio.</p>
+    </div>
+
+    <!-- Generar claves -->
+    <div class="card mb-20">
+      <div class="card-header">
+        <div class="card-icon" style="background:#FDF4FF;"><i class="fa-solid fa-circle-nodes" style="color:#A855F7;"></i></div>
+        <div><div class="card-title">Par de Claves ECC P-256</div><div class="card-desc">Curva SECP256R1 — estándar NIST</div></div>
+      </div>
+      <button class="btn btn-primary" id="eccGenerarClaves">
+        <i class="fa-solid fa-rotate"></i> Generar par ECC P-256
+      </button>
+
+      <div id="eccKeysPanel" class="hidden mt-16">
+        <div class="two-col">
+          <div>
+            <div class="code-block-header">
+              <span class="code-block-label">Clave Privada (PEM)</span>
+              <button class="btn btn-ghost btn-sm" id="copyEccPriv"><i class="fa-solid fa-copy"></i> Copiar</button>
+            </div>
+            <textarea class="textarea text-mono" id="eccPrivKey" rows="6" style="min-height:140px;font-size:11px;" placeholder="-----BEGIN EC PRIVATE KEY-----"></textarea>
+          </div>
+          <div>
+            <div class="code-block-header">
+              <span class="code-block-label">Clave Pública (PEM)</span>
+              <button class="btn btn-ghost btn-sm" id="copyEccPub"><i class="fa-solid fa-copy"></i> Copiar</button>
+            </div>
+            <textarea class="textarea text-mono" id="eccPubKey" rows="6" style="min-height:140px;font-size:11px;" placeholder="-----BEGIN PUBLIC KEY-----"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col mb-20">
+      <!-- Firmar -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i class="fa-solid fa-pen-nib"></i></div>
+          <div><div class="card-title">Firmar</div><div class="card-desc">Con clave privada ECC</div></div>
+        </div>
+        <form id="eccFirmarForm">
+          <div class="form-group">
+            <label class="form-label" for="eccMsgFirmar">Mensaje</label>
+            <textarea class="textarea" id="eccMsgFirmar" rows="3" placeholder="Mensaje a firmar..."
+              data-counter="eccMsgFirmarCount" style="min-height:90px;"></textarea>
+            <div class="char-counter" id="eccMsgFirmarCount">0 caracteres</div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <i class="fa-solid fa-pen-nib"></i> Firmar con ECC
+          </button>
+        </form>
+        <div id="eccFirmaPanel" class="hidden mt-16">
+          <div class="code-block-header">
+            <span class="code-block-label">Firma (Base64)</span>
+            <button class="btn btn-ghost btn-sm" id="copyEccFirma"><i class="fa-solid fa-copy"></i></button>
+          </div>
+          <div class="code-block pem" id="eccFirmaResult" style="word-break:break-all;"></div>
+        </div>
+      </div>
+
+      <!-- Verificar -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon success-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div><div class="card-title">Verificar</div><div class="card-desc">Con clave pública ECC</div></div>
+        </div>
+        <form id="eccVerificarForm">
+          <div class="form-group">
+            <label class="form-label" for="eccMsgVerify">Mensaje</label>
+            <textarea class="textarea" id="eccMsgVerify" rows="2" placeholder="Mensaje original..." style="min-height:72px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="eccFirmaVerify">Firma (Base64)</label>
+            <textarea class="textarea text-mono" id="eccFirmaVerify" rows="2" placeholder="Firma en Base64..." style="min-height:72px;font-size:11px;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="eccPubKeyVerify">Clave Pública (PEM)</label>
+            <textarea class="textarea text-mono" id="eccPubKeyVerify" rows="3" placeholder="-----BEGIN PUBLIC KEY-----" style="min-height:90px;font-size:11px;"></textarea>
+          </div>
+          <button type="submit" class="btn btn-secondary btn-full">
+            <i class="fa-solid fa-shield-check"></i> Verificar firma ECC
+          </button>
+        </form>
+        <div id="eccVerifyResult" class="hidden"></div>
+      </div>
+    </div>
+
+    <div class="fun-fact">
+      <i class="fa-solid fa-lightbulb"></i>
+      <p><strong>Dato curioso:</strong> La criptografía de curvas elípticas es la base de los modernos <em>passkeys</em>, Bitcoin, Ethereum, TLS 1.3 y los certificados de código de Apple/Google. Su seguridad se basa en el problema del logaritmo discreto en curvas elípticas, para el cual no existe algoritmo clásico eficiente conocido.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>
+      <div class="footer-brand">CryptoLab</div>
+      <div class="footer-sub">Suite educativa de criptografía — Python + cryptography (PyCA)</div>
+    </div>
+    <div class="footer-algorithms">
+      <span class="footer-tag"><i class="fa-solid fa-circle-check"></i> Message Digest</span>
+      <span class="footer-tag"><i class="fa-solid fa-circle-check"></i> RSA Digital Signature</span>
+      <span class="footer-tag"><i class="fa-solid fa-circle-check"></i> AES-256-GCM</span>
+      <span class="footer-tag"><i class="fa-solid fa-circle-check"></i> RSA-OAEP</span>
+      <span class="footer-tag"><i class="fa-solid fa-circle-check"></i> ECC ECDSA</span>
+    </div>
+  </footer>
+
+</div><!-- /main-content -->
+
+<!-- Spinner -->
+<div class="spinner-overlay" id="spinnerOverlay" role="status" aria-live="polite">
+  <div class="spinner"></div>
+  <span class="spinner-text">Procesando...</span>
+</div>
+
+<!-- Toasts -->
+<div class="toast-container" id="toastContainer" aria-live="assertive"></div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
